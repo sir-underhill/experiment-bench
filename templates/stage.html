@@ -1,0 +1,106 @@
+{{define "stage"}}{{if eq .Stage 1}}
+<section class="box stage">
+<h2>Stage 1 — Observe</h2>
+<p class="muted">Honest observation of where you're standing. No fixing yet.</p>
+<form hx-post="/answers" hx-target="#stage-zone" hx-swap="outerHTML" class="flow-gap wide-inputs">
+<input type="hidden" name="stage" value="1">
+<fieldset><legend>Where do you mostly live on the ambition × curiosity grid?</legend>
+<label><input type="radio" name="q_mindset" value="cynicism"> <strong>Cynicism</strong> — low energy about it all, low pull toward anything</label>
+<label><input type="radio" name="q_mindset" value="escapism"> <strong>Escapism</strong> — endlessly curious, rarely builds; rabbit holes as shelter</label>
+<label><input type="radio" name="q_mindset" value="perfectionism"> <strong>Perfectionism</strong> — ambitious but rigid; a plan must be certain before starting</label>
+<label><input type="radio" name="q_mindset" value="experimental"> <strong>Experimental</strong> — uncertainty reads as opportunity, failures as data</label>
+</fieldset>
+<label>Think of the last goal you set and quietly dropped. What <em>actually</em> happened?
+<textarea name="q_last_goal" rows="2" placeholder="e.g. it demanded a streak; one missed day killed the whole thing…"></textarea></label>
+<label>Baseline: describe a typical day in the area of life you most want to change. Be specific — this is your control data.
+<textarea name="q_typical_day" rows="3" placeholder="when you wake, where the hours leak, what you reach for on autopilot…"></textarea></label>
+<p><button type="submit">Save &amp; continue →</button></p>
+</form>
+</section>
+
+{{else if eq .Stage 2}}
+<section class="box stage">
+<h2>Stage 2 — Intentions, not goals</h2>
+<p class="muted">The mind-map stage. Drill under surface goals: “buy a house” was really “financial security + a creative project.”</p>
+<form hx-post="/answers" hx-target="#stage-zone" hx-swap="outerHTML" class="flow-gap wide-inputs">
+<input type="hidden" name="stage" value="2">
+<fieldset><legend>Which areas of life are nagging at you? (tick any)</legend>
+<label><input type="checkbox" name="q_areas" value="digital hygiene"> digital hygiene / attention</label>
+<label><input type="checkbox" name="q_areas" value="creativity & making"> creativity &amp; making</label>
+<label><input type="checkbox" name="q_areas" value="cognition & focus"> cognition &amp; focus</label>
+<label><input type="checkbox" name="q_areas" value="money & spending"> money &amp; spending</label>
+<label><input type="checkbox" name="q_areas" value="career direction"> career direction / impact</label>
+<label><input type="checkbox" name="q_areas" value="health & movement"> health &amp; movement</label>
+<label><input type="checkbox" name="q_areas" value="relationships"> relationships</label>
+<label><input type="checkbox" name="q_areas" value="reading & learning"> reading &amp; learning</label>
+<label><input type="checkbox" name="q_areas" value="other"> something else</label>
+</fieldset>
+<label>Which one nags loudest right now — and in what moment do you notice it?
+<textarea name="q_nagging" rows="2"></textarea></label>
+<label>What's the intention <em>underneath</em> the surface goal? (What would it actually give you?)
+<textarea name="q_underneath" rows="2" placeholder="surface: read 30 books → underneath: feel like my attention belongs to me again"></textarea></label>
+<label>If this worked, what would feel different in an ordinary week? No metrics — describe a scene.
+<textarea name="q_feels" rows="2"></textarea></label>
+<p><button type="submit">Save &amp; continue →</button></p>
+</form>
+</section>
+
+{{else if eq .Stage 3}}
+<section class="box stage">
+<h2>Stage 3 — Design the tiny experiment</h2>
+<p class="muted">Smallest version. Startable today. Nothing to buy, nobody to ask.</p>
+<form hx-post="/answers" hx-target="#stage-zone" hx-swap="outerHTML" class="flow-gap wide-inputs">
+<input type="hidden" name="stage" value="3">
+<label>Turn it into a research question: <em>“If I ___ for ___, will I ___?”</em>
+<input name="q_research" placeholder="If I only read from a pre-picked list for a month, will I finish more and wander less?"></label>
+<label>The action — the smallest concrete version, using what you already own. (15-minute scale, not lifestyle-overhaul scale.)
+<textarea name="q_action" rows="2"></textarea></label>
+<fieldset><legend>Commitment pact — how long will you run it before judging?</legend>
+<label><input type="radio" name="q_duration" value="2 weeks"> 2 weeks — a first taste</label>
+<label><input type="radio" name="q_duration" value="1 month" checked> 1 month — the default run</label>
+<label><input type="radio" name="q_duration" value="3 months"> 3 months — for slow-burn things (like a commonplace book)</label>
+</fieldset>
+<p class="muted">A pact is actionable, needs no extra resources, and <strong>doesn't have to stick</strong> — you just have to finish the run.</p>
+<p><button type="submit">Save &amp; continue →</button></p>
+</form>
+</section>
+
+{{else if eq .Stage 4}}
+<section class="box stage">
+<h2>Stage 4 — Data &amp; the pact</h2>
+<form hx-post="/answers" hx-target="#stage-zone" hx-swap="outerHTML" class="flow-gap wide-inputs">
+<input type="hidden" name="stage" value="4">
+<label>What data will you collect? Pick the thing you'll <em>actually</em> record.
+<input name="q_data" placeholder="one-line daily note · tick boxes in the planner · screen-time screenshots weekly…"></label>
+<label>Write your prediction down, then let the results surprise you. What do you expect will happen?
+<textarea name="q_predict" rows="2"></textarea></label>
+<label>If it flops, what will that still teach you? (This is the reframe — failure is a result, not a verdict.)
+<textarea name="q_not_stick" rows="2"></textarea></label>
+<label>Parking lot — dump every other experiment idea here. You'll pull them into later months as you go.
+<textarea name="q_ideas" rows="3" placeholder="no phone for the first hour · commonplace-book round two · one craft project per month · tracking every purchase for a quarter…"></textarea></label>
+<p><button type="submit">Finish → compile my experiment card</button></p>
+</form>
+</section>
+
+{{else}}
+<section class="box stage">
+<h2>Done — your draft experiment card</h2>
+{{with $ := .}}
+<p>Your answers are saved. This draft is built from them — send it to <a href="/experiments">the board</a> and adjust anything there:</p>
+<div class="grid exp-grid">
+<article class="box exp-card">
+<h3>Draft experiment</h3>
+<dl class="exp-fields">
+{{with $.Answers}}<dt>Baseline mindset</dt><dd>{{.mindset}}</dd>
+<dt>Area &amp; intention</dt><dd>{{.nagging}} — underneath: {{.underneath}}</dd>
+<dt>Research question</dt><dd>{{.research}}</dd>
+<dt>The action</dt><dd>{{.action}}</dd>
+<dt>Commitment pact</dt><dd>{{.duration}} — finish the run; sticking is a separate question</dd>
+<dt>Data plan</dt><dd>{{.data}}</dd>
+<dt>Prediction (pre-registered)</dt><dd>{{.predict}}</dd>{{end}}</dl>
+</article>
+</div>
+<p><a class="big" href="/experiments?draft=1">Send it to the board →</a> · or <a href="/qa">revisit your answers</a></p>
+{{end}}
+</section>
+{{end}}{{end}}

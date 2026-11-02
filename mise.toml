@@ -1,0 +1,53 @@
+[tools]
+go = "1.27.3"
+
+[env]
+PORT = "8321"
+BIND = "0.0.0.0"
+DATA_DIR = "{{config_root}}/data"
+
+[tasks.build]
+description = "Compile the server binary"
+run = "go build -o experiment-bench ."
+
+[tasks.dev]
+description = "Build + run in foreground"
+run = "go build -o experiment-bench . && ./experiment-bench"
+
+[tasks.serve]
+description = "Build + run in background (LAN)"
+run = "go build -o experiment-bench . && (systemctl --user is-active --quiet experiment-bench && systemctl --user restart experiment-bench || ./experiment-bench &)"
+
+[tasks.test]
+description = "Smoke-test: build, hit pages, print status codes"
+run = """
+go build -o experiment-bench .
+PORT=8321 ./experiment-bench & PID=$!
+sleep 0.5
+for p in / /qa /experiments /print; do
+  printf "%s -> %s\\n" "$p" "$(curl -s -o /dev/null -w '%{http_code}' http://127.0.0.1:8321$p)"
+done
+kill $PID
+"""
+
+[tasks.install-service]
+description = "Install systemd user unit so the site survives reboots"
+run = """
+mkdir -p ~/.config/systemd/user
+cat > ~/.config/systemd/user/experiment-bench.service <<UNIT
+[Unit]
+Description=Experiment Bench (LAN Q/A site)
+After=network.target
+
+[Service]
+WorkingDirectory=$PWD
+ExecStart=$HOME/.local/bin/mise x -- $PWD/experiment-bench
+Restart=on-failure
+
+[Install]
+WantedBy=default.target
+UNIT
+systemctl --user daemon-reload
+systemctl --user enable --now experiment-bench
+systemctl --user status experiment-bench --no-pager | head -5
+"""

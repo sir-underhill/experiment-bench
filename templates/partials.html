@@ -1,0 +1,82 @@
+{{define "head"}}<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Experiment Bench</title>
+<link rel="stylesheet" href="/static/missing.css">
+<link rel="stylesheet" href="/static/style.css">
+<script src="/static/htmx4.js" defer></script>
+</head>
+<body>
+<header>
+<nav class="main-nav" aria-label="Main">
+<strong>⚗︎ Experiment Bench</strong>
+<span><a href="/">The idea</a> · <a href="/qa">Q/A</a> · <a href="/experiments">Board</a> · <a href="/print">Print</a></span>
+</nav>
+</header>
+<main class="container">{{end}}
+
+{{define "foot"}}
+</main>
+<footer>
+<p>Set up from <a href="https://www.youtube.com/watch?v=Xpp5WT_3uqQ">Mia's experiment compilation</a> ·
+frameworks: the <em>experimental mindset</em> (Big Think / Anne-Laure Le Cunff) ·
+served from the Dell over LAN · run experiments, collect data, stay curious.</p>
+</footer>
+</body>
+</html>{{end}}
+
+{{define "statuschip"}}<span class="chip chip-{{.}}">{{.}}</span>{{end}}
+
+{{define "experiment-card"}}
+<article class="box exp-card">
+<header class="exp-head">
+<h3>{{if .Name}}{{.Name}}{{else}}Untitled experiment{{end}} {{template "statuschip" .Status}}</h3>
+<p class="muted">{{if .Area}}<mark>{{.Area}}</mark> · {{end}}started {{.Started}} · review by <strong>{{if .Review}}{{.Review}}{{else}}—{{end}}</strong></p>
+</header>
+<dl class="exp-fields">
+{{if .ResearchQ}}<dt>Research question</dt><dd>{{.ResearchQ}}</dd>{{end}}
+{{if .Action}}<dt>The action</dt><dd>{{.Action}}</dd>{{end}}
+{{if .Duration}}<dt>Commitment pact</dt><dd>{{.Duration}} — it doesn't have to stick, you just have to finish</dd>{{end}}
+{{if .DataPlan}}<dt>Data collected</dt><dd>{{.DataPlan}}</dd>{{end}}
+{{if .Notes}}<dt>Notes</dt><dd class="prewrap">{{.Notes}}</dd>{{end}}
+</dl>
+<div class="f-row exp-actions">
+<form hx-post="/experiments/{{.ID}}/status" hx-target="#board" hx-swap="outerHTML">
+<button type="submit">↻ advance status</button>
+</form>
+<form hx-post="/experiments/{{.ID}}/delete" hx-target="#board" hx-swap="outerHTML" hx-confirm="Delete this experiment?">
+<button type="submit" class="bad">✕ delete</button>
+</form>
+</div>
+</article>
+{{end}}
+
+{{define "board"}}
+<div id="board">
+{{if .Experiments}}
+<div class="grid exp-grid">
+{{range .Experiments}}{{template "experiment-card" .}}{{end}}
+</div>
+{{else}}
+<aside class="info">No experiments on the board yet. Run the <a href="/qa">Q/A</a> to draft your first one, or add one below.</aside>
+{{end}}
+
+<details class="box add-exp">
+<summary><strong>+ Design a new tiny experiment</strong></summary>
+<form method="post" action="/experiments" hx-post="/experiments" hx-target="#board" hx-swap="outerHTML" class="flow-gap wide-inputs">
+<label>Name <input name="name" required value="{{.Prefill.name}}" placeholder="e.g. Be my own algorithm"></label>
+<label>Area <input name="area" value="{{.Prefill.area}}" placeholder="e.g. digital hygiene"></label>
+<label>Research question <input name="research_q" value="{{.Prefill.research_q}}" placeholder="If I ___ for ___, will I ___?"></label>
+<label>The action <textarea name="action" rows="2" placeholder="Smallest version — startable today, with what you already own">{{.Prefill.action}}</textarea></label>
+<label>Commitment pact
+<select name="duration">
+{{range $d := list "2 weeks" "1 month" "3 months"}}<option {{if eq $d $.Prefill.duration}}selected{{end}}>{{$d}}</option>{{end}}
+</select></label>
+<label>Data plan <input name="data_plan" value="{{.Prefill.data_plan}}" placeholder="daily one-line notes · tick boxes · screen-time numbers…"></label>
+<p><button type="submit">Add to board</button></p>
+</form>
+</details>
+</div>
+{{end}}

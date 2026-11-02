@@ -1,0 +1,33 @@
+{{template "head" .}}
+<h1>Experiment bench — run sheet</h1>
+<p class="muted">Printed {{.Today}}. One page per run. Fill the results in by hand; “it flopped” is a valid result.</p>
+{{if .Experiments}}
+{{range .Experiments}}
+<section class="box print-card">
+<h2>{{.Name}} <span class="muted">[{{.Area}}]</span></h2>
+<p><strong>Research question:</strong> {{.ResearchQ}}</p>
+<p><strong>The action:</strong> {{.Action}}</p>
+<p><strong>Pact:</strong> {{.Duration}} · started {{.Started}} · review by {{.Review}} — finish the run.</p>
+<p><strong>Data:</strong> {{.DataPlan}}</p>
+<p><strong>Prediction:</strong> {{if .Notes}}{{.Notes}}{{else}}<em>written before starting</em>{{end}}</p>
+<hr>
+<p><strong>Result:</strong></p>
+<p class="writelines">&nbsp;</p>
+<p class="writelines">&nbsp;</p>
+<p><strong>Decision (circle one):</strong> keep · revise parameters · drop — because:</p>
+<p class="writelines">&nbsp;</p>
+</section>
+{{end}}
+{{else}}
+<p>No experiments yet — run the <a href="/qa">Q/A</a> first.</p>
+{{end}}
+<section class="box">
+<h2>Reminders</h2>
+<ul>
+<li>Regularity over streaks — a missed day doesn't end the run.</li>
+<li>The pact doesn't have to stick; you just have to finish.</li>
+<li>“Maybe it's not for you <em>right now</em>” — a failed run under one foundation can succeed under another.</li>
+<li>Analyze → keep / revise / drop. All three are data.</li>
+</ul>
+</section>
+{{template "foot" .}}

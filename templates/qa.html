@@ -1,0 +1,22 @@
+{{template "head" .}}
+<h1>The Q/A</h1>
+<p>Four stages, mapped to the loop: <strong>observe → intention → design → pact</strong>.
+Your answers save as you go (stored server-side at <code>data/state.json</code>) and compile into
+<a href="/experiments">experiment cards</a> at the end. There are no wrong answers — this is baseline data.</p>
+
+<ol class="steps" aria-label="Progress">
+<li class="{{if ge .Stage 1}}done{{end}} {{if eq .Stage 1}}current{{end}}">Observe</li>
+<li class="{{if ge .Stage 2}}done{{end}} {{if eq .Stage 2}}current{{end}}">Intentions</li>
+<li class="{{if ge .Stage 3}}done{{end}} {{if eq .Stage 3}}current{{end}}">Design</li>
+<li class="{{if ge .Stage 4}}done{{end}} {{if eq .Stage 4}}current{{end}}">Pact</li>
+<li class="{{if ge .Stage 5}}done{{end}} {{if eq .Stage 5}}current{{end}}">Board</li>
+</ol>
+
+<div id="stage-zone">
+{{template "stage" .}}
+</div>
+
+<form method="post" action="/reset" class="reset-form">
+<button type="submit" class="plain">↺ start the Q/A over (keeps the board)</button>
+</form>
+{{template "foot" .}}

@@ -1,0 +1,57 @@
+/* Experiment Bench — thin layer over missing.css */
+
+.main-nav { display: flex; justify-content: space-between; flex-wrap: wrap; gap: var(--gap); }
+
+/* mindset grid */
+.mindset-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: var(--gap);
+  border-inline-start: 3px solid var(--accent); border-block-end: 3px solid var(--accent);
+  padding: var(--gap); margin-block: var(--gap);
+}
+.mg-cell { padding: var(--gap); border: 1px solid var(--graphical-fg); display: flex; flex-direction: column; gap: .4em; }
+.mg-cell strong { font-family: var(--display-font); font-size: 1.1em; }
+.mg-esc  { opacity: .75; }
+.mg-cyn  { opacity: .75; }
+.mg-perf { opacity: .75; }
+.mg-exp  { background: var(--ok-bg); color: var(--ok-fg); --accent: var(--ok-fg); --graphical-fg: var(--ok-graphical-fg); border-width: 2px; }
+.axis-label { font-family: var(--secondary-font); font-size: .8em; color: var(--muted-fg); }
+
+/* wizard steps */
+ol.steps { display: flex; gap: var(--gap); flex-wrap: wrap; list-style: none; padding: 0; margin-block: var(--gap); }
+ol.steps li {
+  font-family: var(--secondary-font); font-size: .8em; padding-inline: .8em;
+  border: 1px solid var(--graphical-fg); border-radius: 999rem; padding-block: .2em; opacity: .5;
+}
+ol.steps li.done { opacity: 1; }
+ol.steps li.current { opacity: 1; background: var(--accent); color: var(--bg); border-color: var(--accent); }
+
+/* experiment cards */
+.exp-grid { grid-template-columns: repeat(auto-fill, minmax(22rem, 1fr)); }
+.exp-card h3 { display: flex; align-items: center; gap: .5em; flex-wrap: wrap; }
+.exp-head { border: none; margin-block: 0; }
+.exp-fields dt { font-family: var(--secondary-font); font-weight: 700; margin-block-start: var(--gap); }
+.exp-fields dd { margin: 0; }
+.exp-actions { margin-block-start: var(--gap); align-items: center; }
+.muted { color: var(--muted-fg); }
+.prewrap { white-space: pre-wrap; }
+
+/* status chips */
+.chip {
+  font-family: var(--secondary-font); font-size: .7em; font-weight: 700; text-transform: uppercase;
+  letter-spacing: .05em; padding: .15em .6em; border-radius: 999rem; border: 1px solid currentColor;
+}
+.chip-running   { color: var(--info-fg); }
+.chip-analyzing { color: var(--warn-fg); }
+.chip-kept      { color: var(--ok-fg); }
+.chip-revised   { color: var(--muted-accent); }
+.chip-dropped   { color: var(--bad-fg); }
+
+/* add-experiment details + reset */
+.add-exp summary { cursor: pointer; }
+.reset-form { margin-block-start: calc(3 * var(--gap)); }
+
+/* print run-sheet */
+.writelines { border-block-end: 1px solid var(--faded-fg); min-block-size: 2em; }
+@media print {
+  .main-nav, .exp-actions, .add-exp, .reset-form { display: none; }
+}
